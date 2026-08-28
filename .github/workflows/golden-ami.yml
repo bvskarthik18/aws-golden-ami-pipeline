@@ -17,11 +17,24 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v4
 
-            - name: Install AWS CLI
-              uses: unfor19/install-aws-cli-action@v1
+            # - name: Install AWS CLI
+            #   uses: unfor19/install-aws-cli-action@v1
+
+            - name: Install AWSTOE
+              run: |
+                set -e
+                echo "Installing AWSTOE..."
+                curl -fL \
+                    https://awstoe-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/amd64/awstoe \
+                    -o awstoe
+                chmod +x awstoe
+                sudo mv awstoe /usr/local/bin/awstoe
+                echo "AWSTOE installation completed successfully."
+                awstoe version
 
             - name: Validate AWSTOE Component files
               run: |
+                set -e
                 echo "Validating AWSTOE component files..."
 
                 for file in components/*/component.yml; do
