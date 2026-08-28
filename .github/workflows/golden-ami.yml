@@ -1,61 +1,92 @@
-name: Golden AMI CI
+# name: Golden AMI CI
+
+# on:
+#     push:
+#         branches:
+#             - main
+#     # pull_request:
+#     #     branches:
+#     #         - main
+
+# permissions:
+#     id-token: write
+#     contents: read
+    
+# jobs:
+#     validate-components:
+#         name: Validate AWSTOE-Components
+#         runs-on: ubuntu-latest
+
+#         steps:
+#             - name: Checkout Repository
+#               uses: actions/checkout@v5
+            
+#             # - name: Debug OIDC
+#             #   uses: github/actions-oidc-debugger@main
+#             #   with:
+#             #     audience: sts.amazonaws.com
+
+#             - name: Configure AWS credentials using OIDC
+#               uses: aws-actions/configure-aws-credentials@v5
+#               with:
+#                 role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+#                 aws-region: ${{ vars.AWS_REGION }}
+
+#             - name: Verify AWS Identity
+#               run: |
+#                 aws sts get-caller-identity
+
+#             - name: Install AWSTOE
+#               run: |
+#                 set -e
+#                 echo "Installing AWSTOE..."
+#                 curl -fL \
+#                     https://awstoe-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/amd64/awstoe \
+#                     -o awstoe
+#                 chmod +x awstoe
+#                 sudo mv awstoe /usr/local/bin/awstoe
+#                 echo "AWSTOE installation completed successfully."
+#                 awstoe version
+
+#             - name: Validate AWSTOE Component files
+#               run: |  
+#                 set -e
+#                 echo "Validating AWSTOE component files..."
+
+#                 for file in components/*/component.yml; do
+#                     echo "Checking $file..."
+#                     awstoe validate --documents "$file"
+#                 done
+
+#                 echo "All AWSTOE component files validated successfully."
+
+# TESSTING>>>>>>>>>>>>>>>>>>
+
+name: OIDC Test
 
 on:
-    push:
-        branches:
-            - main
-    # pull_request:
-    #     branches:
-    #         - main
+  push:
+    branches:
+      - main
 
 permissions:
-    id-token: write
-    contents: read
-    
+  id-token: write
+  contents: read
+
 jobs:
-    validate-components:
-        name: Validate AWSTOE-Components
-        runs-on: ubuntu-latest
+  oidc-test:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v5
-            
-            # - name: Debug OIDC
-            #   uses: github/actions-oidc-debugger@main
-            #   with:
-            #     audience: sts.amazonaws.com
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
 
-            - name: Configure AWS credentials using OIDC
-              uses: aws-actions/configure-aws-credentials@v5
-              with:
-                role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-                aws-region: ${{ vars.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
 
-            - name: Verify AWS Identity
-              run: |
-                aws sts get-caller-identity
-
-            - name: Install AWSTOE
-              run: |
-                set -e
-                echo "Installing AWSTOE..."
-                curl -fL \
-                    https://awstoe-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/amd64/awstoe \
-                    -o awstoe
-                chmod +x awstoe
-                sudo mv awstoe /usr/local/bin/awstoe
-                echo "AWSTOE installation completed successfully."
-                awstoe version
-
-            - name: Validate AWSTOE Component files
-              run: |  
-                set -e
-                echo "Validating AWSTOE component files..."
-
-                for file in components/*/component.yml; do
-                    echo "Checking $file..."
-                    awstoe validate --documents "$file"
-                done
-
-                echo "All AWSTOE component files validated successfully."
+      - name: Verify AWS Identity
+        run: |
+          aws sts get-caller-identity
