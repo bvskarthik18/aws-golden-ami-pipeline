@@ -12,6 +12,7 @@
 #     id-token: write
 #     contents: read
     
+
 # jobs:
 #     validate-components:
 #         name: Validate AWSTOE Components
