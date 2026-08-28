@@ -1,11 +1,6 @@
 name: base-os
 description: "AWSTOE component to install and configure a base OS."
 schemaVersion: 1.0
-# parameters:
-#   - name: environment
-#     type: String
-#     default: "DEV"
-#     description: The message to display on the server.
 
 phases:
   - name: build
