@@ -1,0 +1,44 @@
+name: base-os
+description: "AWSTOE component to install and configure a base OS."
+schemaVersion: 1.0
+# parameters:
+#   - name: environment
+#     type: String
+#     default: "DEV"
+#     description: The message to display on the server.
+
+phases:
+  - name: build
+    steps:
+      - name: PrintOSInfo
+        action: ExecuteBash
+        inputs:
+          commands:
+            - set -e
+            - echo "OS Information:"
+            - uname -a
+      - name: UpdateBaseOS
+        action: ExecuteBash
+        inputs:
+          commands:
+            - set -e
+            - echo "Updating base OS packages..."
+            - yum update -y
+      - name: InstallUtilities
+        action: ExecuteBash
+        inputs:
+          commands:
+            - set -e
+            - echo "Installing basic utilities..."
+            - yum install -y curl unzip jq
+            - echo "Base OS installation and configuration completed successfully."
+      - name: ValidateBaseOS
+        action: ExecuteBash
+        inputs:
+          commands:
+            - set -e
+            - echo "Validating base OS installation..."
+            - command -v curl
+            - command -v unzip
+            - command -v jq
+            - echo "Base OS validation completed successfully."

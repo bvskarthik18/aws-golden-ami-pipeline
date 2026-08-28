@@ -1,0 +1,35 @@
+name: Golden AMI CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+    
+jobs:
+    validate-components:
+        name: Validate AWSTOE Components
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Install AWS CLI
+              uses: aws-actions/setup-cli@v2
+
+            - name: Validate AWSTOE Component files
+              run: |
+                echo "Validating AWSTOE component files..."
+
+                for file in components/*/component.yml; do
+                    echo "Checking $file..."
+                    if ! aws imagebuilder validate-component --cli-input-yaml file://"$file"; then
+                        echo "Validation failed for $file"
+                        exit 1
+                    fi
+                done
+
+                echo "All AWSTOE component files validated successfully."
