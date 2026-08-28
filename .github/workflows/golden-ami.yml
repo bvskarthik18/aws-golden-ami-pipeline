@@ -8,14 +8,16 @@ on:
         branches:
             - main
 
-permissions:
-    id-token: write
-    contents: read
+
     
 jobs:
     validate-components:
         name: Validate AWSTOE Components
         runs-on: ubuntu-latest
+
+        permissions:
+            id-token: write
+            contents: read
 
         steps:
             - name: Checkout Repository
