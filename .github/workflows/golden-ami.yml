@@ -26,10 +26,7 @@ jobs:
 
                 for file in components/*/component.yml; do
                     echo "Checking $file..."
-                    if ! aws imagebuilder validate-component --cli-input-yaml file://"$file"; then
-                        echo "Validation failed for $file"
-                        exit 1
-                    fi
+                    awstoe validate --documents "$file"
                 done
 
                 echo "All AWSTOE component files validated successfully."
