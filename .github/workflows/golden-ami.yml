@@ -14,7 +14,7 @@ permissions:
     
 jobs:
     validate-components:
-        name: Validate AWSTOE Components
+        name: Validate AWSTOE-Components
         runs-on: ubuntu-latest
 
         steps:
